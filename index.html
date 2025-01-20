@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+        /* Global Styles */
+        body {
+            background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+            border-radius: 15px;
+            height: 90%;
+            width: 450px;
+            max-width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .chat-header h1 {
+            font-size: 26px;
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+
+        /* Message Area */
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .messages .user-message,
+        .messages .ai-message,
+        .messages .ai-typing {
+            font-family: 'Lato', sans-serif;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            animation: fadeIn 0.5s ease-out;
+            word-wrap: break-word;
+        }
+
+        .messages .user-message {
+            background-color: #cfe2f3;
+            align-self: flex-start;
+            border-radius: 12px 12px 5px 12px;
+        }
+
+        .messages .ai-message {
+            background-color: #d9f8c4;
+            align-self: flex-end;
+            border-radius: 12px 12px 12px 5px;
+        }
+
+        .messages .ai-typing {
+            background-color: #f5f5f5;
+            align-self: center;
+            font-style: italic;
+            color: #888;
+            text-align: center;
+        }
+
+        /* Input Container */
+        .input-container {
+            font-family: mo;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .input-container input {
+            width: 70%;
+            padding: 12px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-container input:focus {
+            background-color: azure;
+            border-color: #a18cd1;
+            box-shadow: 0 0 8px rgba(161, 140, 209, 0.8);
+        }
+
+        .input-container button,
+        .clear-btn {
+            margin-left: 10px;
+            background-image: linear-gradient(to top, #5f72bd 0%, #9b23ea 100%);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-container button:hover,
+        .clear-btn:hover {
+            background-color: #45a049;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .voice-btn {
+            background-image: linear-gradient(to top, #5f72bd 0%, #9b23ea 100%);
+            color: white;
+            border-radius: 25px;
+            width: 50px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .voice-btn:hover {
+            background-image: linear-gradient(to top, #5f72bd 0%, #9b23ea 100%);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        img{
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+<img src="https://see.fontimg.com/api/rf5/1G0nv/MzBkOTNjODBiZjk1NGM1MGEyNjE2ZWUyNmI2ZGU2ZGUudHRm/QUk/raxye.png?r=fs&h=72&w=1100&fg=000000&bg=FFFFFF&tb=1&s=65" alt="">        </div>
+        <div class="messages" id="messages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Type your message..." onkeyup="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Send</button>
+            <div class="voice-btn" onclick="startVoiceRecognition()">🎙️</div>
+            <button class="clear-btn" onclick="clearMessages()">Clear</button>
+        </div>
+    </div>
+
+    <script src="https://js.puter.com/v2/"></script>
+    <script>
+        var _0x1c9d=["\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x6D\x65\x73\x73\x61\x67\x65\x73","\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72","text","\x68\x72\x65\x66\x20\x64\x61\x64\x73","\x68\x69\x64\x65\x65\x6E\x61\x73\x65","a\x69\x2D\x74\x79\x70\x69\x6E\x67","\x61\x69\x2D\x6D\x65\x73\x73\x61\x67\x65","\x63\x72\x65\x61\x74\x65\x44\x69\x76","content","type","addMessage","messages","\x64\x69\x73\x70\x6C\x61\x79","trim","\x74\x72\x69\x6D","\x65\x73\x74\x72\x61\x70\x72\x6F\x73\x65","error","\x68\x69\x64\x65\x65","r\x65\x73\x70\x6F\x6E\x73\x65","\x70\x75\x74\x65\x72","\x61\x69\x2D\x63\x68\x61\x74\x2E\x63\x68\x61\x74","\x73\x65\x61\x72\x63\x68","u\x73\x65\x72\x49\x6E\x70\x75\x74","\x72\x65\x73\x70\x6F\x6E\x73\x65","\x73\x69\x6E\x67\x6C\x65","\x73\x65\x6E\x64\x4D\x65\x73\x73\x61\x67\x65"];
+        function addMessage(content,type){var el=document.createElement("div");el.classList.add(type);el.innerText=content;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
+        function showAIIsTyping(){var typingDiv=document.createElement("div");typingDiv.classList.add("ai-typing");typingDiv.innerText="AI is typing...";messages.appendChild(typingDiv);messages.scrollTop=messages.scrollHeight;}
+        function hideAIIsTyping(){var typingDiv=document.querySelector(".ai-typing");if(typingDiv){typingDiv.remove();}}
+        async function sendMessage(){var userInput=document.getElementById("userInput").value;if(userInput.trim()==="")return;addMessage(userInput,"user-message");document.getElementById("userInput").value="";showAIIsTyping();try{var response=await puter.ai.chat(userInput);hideAIIsTyping();addMessage(response,"ai-message");}catch(error){hideAIIsTyping();addMessage("Error: Could not fetch response.","ai-message");}}
+        let recognition;function startVoiceRecognition(){if(!('webkitSpeechRecognition'in window)){alert("Sorry, your browser does not support speech recognition.");return;}recognition=new webkitSpeechRecognition();recognition.lang='en-US';recognition.continuous=false;recognition.interimResults=false;recognition.onstart=function(){addMessage("Listening...","ai-message");};recognition.onresult=function(event){var speechResult=event.results[0][0].transcript;document.getElementById("userInput").value=speechResult;sendMessage();};recognition.onerror=function(event){addMessage("Error: Could not recognize voice.","ai-message");};recognition.start();}
+        function clearMessages(){messages.innerHTML="";}
+    </script>
+</body>
+</html>
